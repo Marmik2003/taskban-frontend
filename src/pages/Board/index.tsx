@@ -63,7 +63,7 @@ const exampleBoards: Board[] = [
 const IndividualBoard = () => {
   const params = useParams();
 
-  const board = exampleBoards.find(b => b.id === parseInt(params.boardId!));
+  // const board = exampleBoards.find(b => b.id === parseInt(params.boardId!));
 
   return (
     <div>Board</div>
