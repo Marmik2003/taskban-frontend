@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Board from "../../types/Board";
 import BoardCard from "./BoardCard";
 import BoardDialog from "./BoardDialog";
@@ -69,9 +69,13 @@ const exampleBoards: Board[] = [
 
 const Boards = () => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const [boards, setBoards] = React.useState<Board[]>(exampleBoards);
+  const [boards, setBoards] = React.useState<Board[]>([]);
   const [dialogState, setDialogState] = React.useState(DialogState);
   const [searchString, setSearchString] = React.useState("");
+
+  useEffect(() => {
+    setBoards(exampleBoards);
+  }, []);
 
   const handleDialogClose = () => setIsDialogOpen(false);
 
