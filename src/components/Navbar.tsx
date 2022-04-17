@@ -1,9 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { LayoutContext } from "../context/LayoutContext";
 
 const Navbar = () => {
   const userMenuRef = useRef<HTMLDivElement>(null);
   const userBoxRef = useRef<HTMLDivElement>(null);
+
+  const navigate = useNavigate();
+  const auth = useAuth();
 
   const { isUserMenuOpen, setIsUserMenuOpen } = useContext(LayoutContext);
   const [isUserBoxOpen, setIsUserBoxOpen] = useState(false);
@@ -68,7 +73,7 @@ const Navbar = () => {
               </div>
               <div className="ml-2 capitalize flex ">
                 <h1 className="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">
-                  Marmik
+                  {auth.user}
                 </h1>
                 <i className="fad fa-chevron-down ml-2 text-xs leading-none" />
               </div>
@@ -89,13 +94,15 @@ const Navbar = () => {
               {/* end item */}
               <hr />
               {/* item */}
-              <a
-                className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out"
-                href="/"
+              <button
+                className="w-full text-left px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out"
+                onClick={() => {
+                  auth.signout(() => navigate("/login"));
+                }}
               >
-                <i className="fad fa-user-times text-xs mr-1" />
+                <i className="fas fa-sign-out text-xs mr-1" />
                 log out
-              </a>
+              </button>
               {/* end item */}
             </div>
           </div>

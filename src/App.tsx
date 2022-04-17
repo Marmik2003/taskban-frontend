@@ -1,12 +1,17 @@
 import React from "react";
-import BaseLayout from "./components/BaseLayout";
-// import Login from "./pages/Login";
-// import Register from "./pages/Register";
+import { useRoutes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { AuthProvider } from "./context/AuthContext"; 
+import { routes } from "./routes";
 
 function App() {
+  const renderedRoutes = useRoutes(routes);
 
   return (
-    <BaseLayout />
+    <AuthProvider>
+      {renderedRoutes}
+      <ToastContainer />
+    </AuthProvider>
   );
 }
 

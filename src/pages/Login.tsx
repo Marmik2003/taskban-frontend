@@ -1,20 +1,36 @@
-import React from 'react'
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const auth = useAuth();
+
+  const from = "/dashboard";
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const username = formData.get("username") as string;
+    auth.signin(username, () => navigate(from, { replace: true }));
+  }
+
   return (
-    <div
-      className="w-screen m-auto flex flex-col justify-center items-center mt-12 px-8"
-    >
+    <div className="w-screen m-auto flex flex-col justify-center items-center mt-12 px-8">
       <div className="w-full max-w-md">
-        <img src='/img/logo-monochrome.svg' alt='Taskban Logo' className='w-full mb-6 px-28' />
+        <img
+          src="/img/logo-monochrome.svg"
+          alt="Taskban Logo"
+          className="w-full mb-6 md:px-12 px-28"
+        />
       </div>
       <div className="w-full max-w-md mb-8 flex-col space-y-1 mt-8">
-        <h1 className="text-3xl font-bold text-gray-600">Log in</h1>
+        <h1 className="text-3xl font-bold text-gray-600">Log In</h1>
         <p className="text-gray-400">
-          Enter your credentials to access your account
+          Enter the credentials to log in.
         </p>
       </div>
-      <form className="w-full max-w-md">
+      <form className="w-full max-w-md" onSubmit={handleSubmit}>
         <div className="flex flex-wrap -mx-3 space-y-1 mb-6">
           <div className="w-full px-3">
             <label
@@ -28,6 +44,7 @@ const Login = () => {
               id="grid-username"
               type="text"
               placeholder="Username"
+              name="username"
             />
           </div>
           <div className="w-full px-3">
@@ -42,21 +59,31 @@ const Login = () => {
               id="grid-password"
               type="password"
               placeholder="********"
+              name="password"
             />
           </div>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex-col items-center justify-between space-y-2">
           <button
-            className="w-full bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
+            className="w-full ripple-bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
           >
             Sign In
           </button>
+          {/* sign in link */}
+          <p className="inline-block font-thin align-baseline text-sm text-gray-500">
+            Don't have an account?{" "}
+            <Link
+              className="font-bold text-base text-blue-600 hover:text-blue-800 transition duration-300 ml-1"
+              to="/register"
+            >
+              Sign Up
+            </Link>
+          </p>
         </div>
       </form>
-
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

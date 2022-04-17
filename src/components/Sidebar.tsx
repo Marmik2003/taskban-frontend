@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
+import { NavLink } from "react-router-dom";
 import { LayoutContext } from "../context/LayoutContext";
 
 const Sidebar = () => {
@@ -44,27 +45,31 @@ const Sidebar = () => {
         </div>
         {/* end sidebar toggle */}
         {/* link */}
-        <a
-          href="/"
-          className="mb-3 capitalize font-thin text-sm hover:text-blue-600 transition ease-in-out duration-500 my-2 bg-gray-100 px-2 py-2 rounded-lg"
+        <NavLink 
+          to="home"
+          className={
+            ({isActive}) => "mb-1 capitalize text-sm hover:text-blue-600 transition ease-in-out duration-500 my-2 px-2 py-2 rounded-lg" + (isActive ? " bg-blue-100" : "")
+          }
         >
           <i className="far fa-home mr-2" />
           Home
-        </a>
+        </NavLink>
         {/* end link */}
         {/* link */}
-        <a
-          href="/"
-          className="mb-3 capitalize font-thin text-sm hover:text-blue-600 transition ease-in-out duration-500 my-2 px-2 py-2 rounded-lg"
+        <NavLink
+          to="boards"
+          className={
+            ({isActive}) => "mb-1 capitalize text-sm hover:text-blue-600 transition ease-in-out duration-500 my-2 px-2 py-2 rounded-lg" + (isActive ? " bg-blue-100" : "")
+          }
         >
           <i className="far fa-list mr-2" />
           Boards
-        </a>
+        </NavLink>
         {/* end link */}
         {/* link */}
         <a
           href="/"
-          className="mb-3 capitalize font-thin text-sm hover:text-blue-600 transition ease-in-out duration-500 my-2 px-2 py-2 rounded-lg"
+          className="mb-1 capitalize text-sm hover:text-blue-600 transition ease-in-out duration-500 my-2 px-2 py-2 rounded-lg"
         >
           <i className="far fa-check mr-2" />
           To Do
