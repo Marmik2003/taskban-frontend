@@ -14,29 +14,15 @@ const previledgedRoutes: RouteObject[] = [
   },
   {
     path: "home",
-    element: (
-      <RequireAuth>
-        <Home />
-      </RequireAuth>
-    ),
+    element: <Home />,
   },
   {
     path: "boards",
-    element: (
-      <RequireAuth>
-        <Boards />
-      </RequireAuth>
-    ),
-    children: [
-      {
-        path: ":boardId",
-        element: (
-          <RequireAuth>
-            <Board />
-          </RequireAuth>
-        ),
-      },
-    ],
+    element: <Boards />,
+  },
+  {
+    path: "boards/:id",
+    element: <Board />,
   },
 ];
 

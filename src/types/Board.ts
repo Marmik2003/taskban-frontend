@@ -4,7 +4,7 @@ type UserAvatar = {
   name: string;
 }
 
-type BoardMember = {
+export type BoardMember = {
   id: Number;
   name: string;
   email?: string;
@@ -33,7 +33,7 @@ type TaskLabel = {
   board: Number;
 }
 
-type BoardColumn = {
+export type BoardColumn = {
   id: Number;
   title: string;
   tasks: Task[];

@@ -31,7 +31,7 @@ const BaseLayout = () => {
       <div className="h-screen flex flex-row flex-wrap">
         <Sidebar />
         {/* start content */}
-        <div className="bg-gray-100 flex-1 p-12 lg:p-6 md:mt-16">
+        <div className="bg-gray-100 flex-1 p-12 lg:p-6 md:mt-16 overflow-auto">
           {renderedRoutes}
         </div>
         {/* end content */}
