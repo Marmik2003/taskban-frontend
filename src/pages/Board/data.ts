@@ -20,10 +20,10 @@ type User = {
 };
 
 const jake = {
-  id: 1,
+  id: Math.ceil(Math.random()*10000),
   name: "Jake",
   avatar: {
-    id: 1,
+    id: Math.ceil(Math.random()*10000),
     name: "John Doe",
     photo:
       "https://demos.creative-tim.com/notus-js/assets/img/team-1-800x800.jpg",
@@ -31,17 +31,17 @@ const jake = {
 };
 
 const BMO = {
-  id: 2,
+  id: Math.ceil(Math.random()*10000),
   name: "BMO",
 };
 
 const finn = {
-  id: 3,
+  id: Math.ceil(Math.random()*10000),
   name: "Finn",
 };
 
 const princess = {
-  id: 4,
+  id: Math.ceil(Math.random()*10000),
   name: "Princess bubblegum",
 };
 
@@ -49,94 +49,95 @@ export const authors: BoardMember[] = [jake, BMO, finn, princess];
 
 export const quotes = [
   {
-    id: 1,
+    id: Math.ceil(Math.random()*10000),
     content: "Sometimes life is scary and dark",
-    authors: [BMO, jake],
+    authors: [BMO],
     date: "17 Apr",
     comments: 4,
   },
   {
-    id: 2,
+    id: Math.ceil(Math.random()*10000),
     content:
       "Sucking at something is the first step towards being sorta good at something.",
-    authors: [jake, finn],
+    authors: [jake],
     date: "17 Apr",
     comments: 4,
   },
   {
-    id: 3,
+    id: Math.ceil(Math.random()*10000),
     content: "You got to focus on what's real, man",
-    authors: [finn, jake],
+    authors: [jake],
     date: "17 Apr",
     comments: 4,
   },
   {
-    id: 4,
+    id: Math.ceil(Math.random()*10000),
     content: "Is that where creativity comes from? From sad biz?",
-    authors: [BMO, finn, jake],
+    authors: [finn],
     date: "17 Apr",
     comments: 4,
   },
   {
-    id: 5,
+    id: Math.ceil(Math.random()*10000),
     content: "Homies help homies. Always",
-    authors: [finn, jake, princess],
-    date: "17 Apr",
-    comments: 4,
-  },
-  {
-    id: 6,
-    content: "Responsibility demands sacrifice",
     authors: [princess],
     date: "17 Apr",
     comments: 4,
   },
   {
-    id: 7,
+    id: Math.ceil(Math.random()*10000),
+    content: "Responsibility demands sacrifice",
+    authors: [finn],
+    date: "17 Apr",
+    comments: 4,
+  },
+  {
+    id: Math.ceil(Math.random()*10000),
     content: "That's it! The answer was so simple, I was too smart to see it!",
-    authors: [jake, finn],
+    authors: [princess],
     date: "17 Apr",
     comments: 4,
   },
   {
-    id: 8,
+    id: Math.ceil(Math.random()*10000),
     content: "People make mistakes. It's a part of growing up",
-    authors: [finn, jake],
+    authors: [jake],
     date: "17 Apr",
     comments: 4,
   },
   {
-    id: 9,
+    id: Math.ceil(Math.random()*10000),
     content: "Don't you always call sweatpants 'give up on life pants,' Jake?",
-    authors: [finn, BMO],
+    authors: [BMO],
     date: "17 Apr",
     comments: 4,
   },
   {
-    id: 10,
+    id: Math.ceil(Math.random()*10000),
     content: "I should not have drunk that much tea!",
-    authors: [princess, BMO],
+    authors: [BMO],
     date: "17 Apr",
     comments: 4,
   },
   {
-    id: 11,
+    id: Math.ceil(Math.random()*10000),
     content: "Please! I need the real you!",
-    authors: [princess, jake],
+    authors: [jake],
     date: "17 Apr",
     comments: 4,
   },
   {
-    id: 12,
+    id: Math.ceil(Math.random()*10000),
     content: "Haven't slept for a solid 83 hours, but, yeah, I'm good.",
-    authors: [princess, finn, jake, BMO],
+    authors: [BMO],
     date: "17 Apr",
     comments: 4,
   },
 ];
 
-const getByAuthor = (author: User, items: TaskType[]) =>
-  items.filter((quote) => quote.authors.some((item) => item.id === author.id));
+const getByAuthor = (author: User, items: TaskType[]) => {
+  return items.filter((item) => item.authors.includes(author));
+}
 
 export const authorQuoteMap: Record<string, TaskType[]> = authors.reduce(
   (previous, author) => ({

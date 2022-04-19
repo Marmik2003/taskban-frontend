@@ -15,12 +15,12 @@ export class TaskList extends Component<{ tasks: TaskType[] }> {
     return (
       <>
         {this.props.tasks.map((task, index) => (
-          <Draggable key={index} draggableId={task.id.toString()} index={index}>
-            {(provided) => (
+          <Draggable key={task.id.toString()} draggableId={task.id.toString()} index={index}>
+            {(provided, snapshot) => (
               <Task 
-                key={index} 
                 task={task}
                 provided={provided}
+                isDragging={snapshot.isDragging}
               />
             )}
           </Draggable>

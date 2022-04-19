@@ -11,7 +11,7 @@ interface BoardDialogProps {
 
 const BoardDialog = ({isOpen, closeDialog, dialogState, setDialogState}: BoardDialogProps) => {
   return (
-    <DialogBox dialogTitle='New Board' isOpen={isOpen} closeDialog={closeDialog}>
+    <DialogBox dialogTitle={dialogState.id === 0 ? 'New Board' : 'Edit Board'} isOpen={isOpen} closeDialog={closeDialog}>
       <div className='flex flex-col'>
         <div className='flex flex-col'>
           <label className='block text-gray-700 text-sm font-bold mt-2'>

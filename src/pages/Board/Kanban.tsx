@@ -14,6 +14,25 @@ const Kanban = ({ initial = {} }: KanbanProps) => {
   
   const onDragEnd = (result: DropResult) => {
 
+    if (result.combine) {
+      if (result.type === "COLUMN") {
+        const shallow = [...ordered];
+        shallow.splice(result.source.index, 1);
+        setOrdered(shallow)
+        return;
+      }
+
+      const column = columns[result.source.droppableId];
+      const withQuoteRemoved = [...column];
+      withQuoteRemoved.splice(result.source.index, 1);
+      const newColumns = {
+        ...columns,
+        [result.source.droppableId]: withQuoteRemoved
+      };
+      setColumns(newColumns)
+      return;
+    }
+
     // dropped nowhere
     if (!result.destination) {
       return;
@@ -53,23 +72,14 @@ const Kanban = ({ initial = {} }: KanbanProps) => {
   };
 
   return (
-    <div className="flex flex-col max-w-screen max-h-screen text-gray-700">
-      <div className="">
-        {/* {Object.keys(columns).map((key) => (
-          <Column
-            key={key}
-            title={key}
-            tasks={(columns[key] as TaskType[])}
-
-          />
-        ))} */}
+    <div className="flex w-full max-h-screen text-gray-700">
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable
             droppableId="board"
             type="COLUMN"
             direction="horizontal"
-            ignoreContainerClipping={true}
-            isCombineEnabled={true}
+            ignoreContainerClipping={false}
+            isCombineEnabled={false}
           >
             {(provided) => (
               <div
@@ -90,8 +100,6 @@ const Kanban = ({ initial = {} }: KanbanProps) => {
             )}
           </Droppable>
         </DragDropContext>
-        <div className="flex-shrink-0 w-6"></div>
-      </div>
     </div>
   );
 };

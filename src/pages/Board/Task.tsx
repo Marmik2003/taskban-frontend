@@ -2,19 +2,20 @@ import React from "react";
 import { DraggableProvided } from "react-beautiful-dnd";
 import Tooltip from "../../components/Tooltip";
 import { TaskType } from "./data";
-import './tasks.css';
 
 interface TaskProps {
   task: TaskType
   provided: DraggableProvided
+  isDragging: boolean
 }
 
-const Task = ({task, provided}: TaskProps) => {
+const Task = ({task, provided, isDragging}: TaskProps) => {
   return (
     <div
-      className="flex flex-col items-start p-4 mt-3 bg-white rounded-lg cursor-pointer bg-opacity-90 hover:bg-opacity-100 no-scroll"
+      className={"flex flex-col items-start p-4 mt-3 bg-white rounded-lg cursor-pointer bg-opacity-90 hover:bg-opacity-100 no-scroll" + (isDragging ? " bg-indigo-100 transform rotate-12 transition duration-200" : "")}
       ref={provided.innerRef}
       {...provided.draggableProps}
+      {...provided.dragHandleProps}
     >
       <button className="absolute top-0 right-0 items-center justify-center hidden w-5 h-5 mt-3 mr-2 text-gray-500 rounded hover:bg-gray-200 hover:text-gray-700 group-hover:flex">
         <ThreeDotsIcon />
