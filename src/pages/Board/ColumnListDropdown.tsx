@@ -1,16 +1,16 @@
 import { Menu, Transition } from "@headlessui/react";
 import React from "react";
 
-interface ListDropdownProps {
+interface ColumnListDropdownProps {
   children: JSX.Element[];
 }
 
-const ListDropdown = ({ children }: ListDropdownProps) => {
+const ColumnListDropdown = ({ children }: ColumnListDropdownProps) => {
   return (
     <>
       <Menu as="div" className="relative text-left inline-block lg:hidden">
-        <Menu.Button className="inline-flex justify-end w-full px-4 py-2 text-sm font-medium text-black">
-          <i className="far fa-angle-down"></i>
+        <Menu.Button className="flex items-center justify-center w-6 h-6 ml-auto text-indigo-500 rounded hover:bg-indigo-500 hover:text-indigo-100">
+          <ThreeDotsIcon />
         </Menu.Button>
         <Transition
           as={React.Fragment}
@@ -31,5 +31,16 @@ const ListDropdown = ({ children }: ListDropdownProps) => {
     </>
   );
 };
+const ThreeDotsIcon = () => (
+  <svg
+    className="w-4 h-4 fill-current"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+  >
+    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+  </svg>
+);
 
-export default ListDropdown;
+
+export default ColumnListDropdown;

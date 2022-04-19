@@ -1,13 +1,23 @@
 import React from "react";
 import Kanban from "./Kanban";
-import { authorQuoteMap } from "./data";
+import { authorQuoteMap, TaskType } from "./data";
 import { BoardMember } from "../../types/Board";
 import AddColumnDialog from "./AddColumnDialog";
 import Editable from "../../components/Editable";
+import TaskDialog from "./TaskDialog";
 
 const AddColumnDialogState = {
   id: 0,
   title: "",
+};
+
+const TaskDialogState: TaskType = {
+  id: 0,
+  title: "",
+  content: "",
+  authors: [] as BoardMember[],
+  date: "",
+  comments: 4,
 };
 
 const BoardPersons: BoardMember[] = [
@@ -57,7 +67,11 @@ const IndividualBoard = () => {
     React.useState<BoardMember[]>(BoardPersons);
   const [addColumnDialog, setAddColumnDialog] =
     React.useState<typeof AddColumnDialogState>(AddColumnDialogState);
+  const [taskDialog, setTaskDialog] =
+    React.useState<typeof TaskDialogState>(TaskDialogState);
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] =
+    React.useState<boolean>(false);
+  const [isTaskDialogOpen, setIsTaskDialogOpen] =
     React.useState<boolean>(false);
 
   const boardRef = React.useRef<HTMLInputElement>(null);
@@ -131,13 +145,25 @@ const IndividualBoard = () => {
             </div>
           </div>
         </div>
-        <Kanban initial={authorQuoteMap} />
+        <Kanban 
+          initial={authorQuoteMap} 
+          setIsTaskDialogOpen={setIsTaskDialogOpen}
+          setTaskDialog={setTaskDialog}
+        />
       </div>
       <AddColumnDialog
         dialogState={addColumnDialog}
         setDialogState={setAddColumnDialog}
         isOpen={isAddColumnDialogOpen}
         closeDialog={() => setIsAddColumnDialogOpen(false)}
+      />
+      <TaskDialog
+        task={(taskDialog as TaskType)}
+        isOpen={isTaskDialogOpen}
+        onClose={() => {
+          setTaskDialog(TaskDialogState);
+          setIsTaskDialogOpen(false);
+        }}
       />
     </>
   );

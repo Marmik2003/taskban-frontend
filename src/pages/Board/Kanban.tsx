@@ -6,9 +6,11 @@ import reorder, { reorderQuoteMap } from "./reorder";
 
 interface KanbanProps {
   initial?: {}
+  setTaskDialog: React.Dispatch<React.SetStateAction<TaskType>>;
+  setIsTaskDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Kanban = ({ initial = {} }: KanbanProps) => {
+const Kanban = ({ initial = {}, setIsTaskDialogOpen, setTaskDialog }: KanbanProps) => {
   const [columns, setColumns] = React.useState<Record<string, TaskType[]>>(initial);
   const [ordered, setOrdered] = React.useState<string[]>(Object.keys(initial));
   
@@ -93,6 +95,8 @@ const Kanban = ({ initial = {} }: KanbanProps) => {
                     title={key}
                     tasks={(columns[key] as TaskType[])}
                     index={index}
+                    setTaskDialog={setTaskDialog}
+                    setIsTaskDialogOpen={setIsTaskDialogOpen}
                   />
                 ))} 
                 {provided.placeholder}

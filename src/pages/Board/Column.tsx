@@ -1,5 +1,6 @@
 import React from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+import ColumnListDropdown from "./ColumnListDropdown";
 import { TaskType } from "./data";
 import TaskList from "./TaskList";
 
@@ -7,9 +8,11 @@ interface ColumnProps {
   title: string;
   tasks: TaskType[];
   index: number;
+  setTaskDialog: React.Dispatch<React.SetStateAction<TaskType>>;
+  setIsTaskDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Column = ({ title, tasks, index }: ColumnProps) => {
+const Column = ({ title, tasks, index, setTaskDialog, setIsTaskDialogOpen }: ColumnProps) => {
   return (
     <Draggable draggableId={title} index={index}>
       {(provided) => (
@@ -27,12 +30,24 @@ const Column = ({ title, tasks, index }: ColumnProps) => {
               </span>
             </div>
             <div className="flex space-x-1">
-              <button className="flex items-center justify-center w-6 h-6 ml-auto text-indigo-500 rounded hover:bg-indigo-500 hover:text-indigo-100">
+              <button 
+                className="flex items-center justify-center w-6 h-6 ml-auto text-indigo-500 rounded hover:bg-indigo-500 hover:text-indigo-100"
+                onClick={() => {
+                  setIsTaskDialogOpen(true);
+                }}  
+              >
                 <PlusIcon />
               </button>
-              <button className="flex items-center justify-center w-6 h-6 ml-auto text-indigo-500 rounded hover:bg-indigo-500 hover:text-indigo-100">
-                <ThreeDotsIcon />
-              </button>
+              <ColumnListDropdown>
+                {[<button
+                  onClick={() => console.log("Delete")}
+                  className="group rounded-md flex space-x-2 items-center w-full px-2 py-2 text-sm text-gray-600 hover:bg-gray-600 hover:text-white"
+                  title="Delete"
+                >
+                  <i className="fas fa-trash-alt mr-2"></i> Delete
+                </button>,]}
+
+              </ColumnListDropdown>
             </div>
           </div>
           <Droppable
@@ -72,17 +87,6 @@ const PlusIcon = () => (
       strokeWidth="2"
       d="M12 6v6m0 0v6m0-6h6m-6 0H6"
     ></path>
-  </svg>
-);
-
-const ThreeDotsIcon = () => (
-  <svg
-    className="w-4 h-4 fill-current"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-  >
-    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
   </svg>
 );
 
