@@ -64,7 +64,7 @@ const Tasks = () => {
         <button className="text-gray-800 font-semibold py-2 px-4">Done</button>
       </div>
 
-      <div className="flex flex-col space-y-2 md:w-screen w-full overflow-x-auto">
+      <div className="flex flex-col space-y-2 md:w-screen w-full">
           <SingleTask />
           <SingleTask />
           <SingleTask />

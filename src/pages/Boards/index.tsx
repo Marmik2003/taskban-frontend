@@ -81,9 +81,9 @@ const Boards = () => {
 
   return (
     <>
-      <h4 className="text-3xl font-light text-left">My Boards</h4>
+      <h4 className="text-xl font-light text-left">My Boards</h4>
 
-      <div className="flex flex-wrap justify-between my-4">
+      <div className="flex flex-wrap justify-between my-4 space-y-2">
         <div className="flex">
           <input
             className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
