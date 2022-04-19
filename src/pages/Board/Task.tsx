@@ -24,7 +24,7 @@ const Task = ({task, provided, isDragging}: TaskProps) => {
         Design
       </span> */}
       <h4 className="mt-3 text-sm font-medium">
-        {task.content}
+        {task.title}
       </h4>
       <div className="flex relative items-center w-full mt-3 text-xs font-medium text-gray-400">
         <div className="flex items-center">
