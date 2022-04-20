@@ -1,5 +1,6 @@
-export type Id = number;
-
-export interface TasksByColumn {
-  [key: string]: Id[];
+export type UserType = {
+  id: number;
+  name: string;
+  email: string;
+  username: string;
 }

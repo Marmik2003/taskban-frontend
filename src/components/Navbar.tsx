@@ -73,7 +73,7 @@ const Navbar = () => {
               </div>
               <div className="ml-2 capitalize flex ">
                 <h1 className="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">
-                  {auth.user}
+                  {auth.user?.name || auth.user?.username}
                 </h1>
                 <i className="fad fa-chevron-down ml-2 text-xs leading-none" />
               </div>

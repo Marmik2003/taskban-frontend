@@ -14,8 +14,9 @@ const TaskDialog = ({ task, isOpen, onClose }: TaskDialogProps) => {
       dialogTitle={task.id !== 0 ? "Edit Task" : "Add Task"}
       isOpen={isOpen}
       closeDialog={onClose}
+      maxDialogSize="2xl"
     >
-      <div className="grid grid-cols-3 md:grid-cols-1 space-y-2">
+      <div className="grid grid-cols-3 md:grid-cols-1 space-y-2 space-x-6 md:space-x-0">
         <div className="col-span-2 md:col-span-1">
           <div className="my-2">
             <label className="block text-sm font-medium text-gray-600">
@@ -70,8 +71,8 @@ const TaskDialog = ({ task, isOpen, onClose }: TaskDialogProps) => {
           </div>
         </div>
         {task.id !== 0 && (
-          <div className="col-span-1">
-            <h6 className="text-lg font-bold text-gray-600">Assignees</h6>
+          <div className="col-span-1 px-6 border-l md:border-l-0 md:border-t md:px-0 md:py-3">
+            <h6 className="text-lg font-bold text-gray-600 py-2">Assignees</h6>
             <div className="flex flex-col">
               {task.authors.map((assignee, index) => (
                 <div className="flex items-center" key={index}>
@@ -82,7 +83,17 @@ const TaskDialog = ({ task, isOpen, onClose }: TaskDialogProps) => {
                     alt={assignee.name}
                     className="w-8 h-8 rounded-full border-2 border-blue-50 shadow"
                   />
-                  <div className="ml-3">{assignee.name}</div>
+                  <div className="ml-3">
+                    {assignee.name} <button
+                      className="text-xs ml-1 text-red-500 hover:text-red-700"
+                      onClick={() => {
+                        task.authors.splice(index, 1);
+                      }}
+                    >
+                      <i className="fas fa-times"></i>
+                    </button>
+
+                  </div>
                 </div>
               ))}
             </div>

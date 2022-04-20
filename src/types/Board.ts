@@ -7,11 +7,12 @@ type UserAvatar = {
 export type BoardMember = {
   id: Number;
   name: string;
+  username?: string;
   email?: string;
   avatar?: UserAvatar;
 }
 
-type Task = {
+export type Task = {
   id: Number;
   title: string;
   description: string;
@@ -43,10 +44,10 @@ export type BoardColumn = {
 
 type Board = {
   id: Number;
-  title: string;
+  name: string;
   description: string;
   owner?: Number;
-  members?: BoardMember[];
+  members?: BoardMember[] | Number[];
   columns?: BoardColumn[];
   labels?: TaskLabel[];
 }

@@ -1,3 +1,4 @@
+import { Menu } from "@headlessui/react";
 import React from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import ColumnListDropdown from "./ColumnListDropdown";
@@ -12,7 +13,13 @@ interface ColumnProps {
   setIsTaskDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Column = ({ title, tasks, index, setTaskDialog, setIsTaskDialogOpen }: ColumnProps) => {
+const Column = ({
+  title,
+  tasks,
+  index,
+  setTaskDialog,
+  setIsTaskDialogOpen,
+}: ColumnProps) => {
   return (
     <Draggable draggableId={title} index={index}>
       {(provided) => (
@@ -30,23 +37,24 @@ const Column = ({ title, tasks, index, setTaskDialog, setIsTaskDialogOpen }: Col
               </span>
             </div>
             <div className="flex space-x-1">
-              <button 
+              <button
                 className="flex items-center justify-center w-6 h-6 ml-auto text-indigo-500 rounded hover:bg-indigo-500 hover:text-indigo-100"
                 onClick={() => {
                   setIsTaskDialogOpen(true);
-                }}  
+                }}
               >
                 <PlusIcon />
               </button>
               <ColumnListDropdown>
-                {[<button
-                  onClick={() => console.log("Delete")}
-                  className="group rounded-md flex space-x-2 items-center w-full px-2 py-2 text-sm text-gray-600 hover:bg-gray-600 hover:text-white"
-                  title="Delete"
-                >
-                  <i className="fas fa-trash-alt mr-2"></i> Delete
-                </button>,]}
-
+                <Menu.Item>
+                  <button
+                    onClick={() => console.log("Delete")}
+                    className="group rounded-md flex space-x-2 items-center w-full px-2 py-2 text-sm text-gray-600 hover:bg-gray-600 hover:text-white"
+                    title="Delete"
+                  >
+                    <i className="fas fa-trash-alt mr-2"></i> Delete
+                  </button>
+                </Menu.Item>
               </ColumnListDropdown>
             </div>
           </div>
@@ -63,7 +71,11 @@ const Column = ({ title, tasks, index, setTaskDialog, setIsTaskDialogOpen }: Col
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
-                <TaskList tasks={tasks} />
+                <TaskList
+                  tasks={tasks}
+                  setTaskDialog={setTaskDialog}
+                  setIsTaskDialogOpen={setIsTaskDialogOpen}
+                />
                 {provided.placeholder}
               </div>
             )}

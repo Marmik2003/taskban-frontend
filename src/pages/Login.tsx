@@ -1,18 +1,23 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import LoadingComponent from "../components/LoadingComponent";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+  const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
   const auth = useAuth();
 
   const from = "/dashboard";
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
     const formData = new FormData(event.currentTarget);
     const username = formData.get("username") as string;
-    auth.signin(username, () => navigate(from, { replace: true }));
+    const password = formData.get("password") as string;
+    await auth.signin({username, password}, () => navigate(from, { replace: true }));
+    setLoading(false);
   }
 
   return (
@@ -65,10 +70,13 @@ const Login = () => {
         </div>
         <div className="flex-col items-center justify-between space-y-2">
           <button
-            className="w-full ripple-bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="w-full text-center justify-center ripple-bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
+            disabled={loading}
           >
-            Sign In
+            {loading ? (
+              <div className="w-min mx-auto"><LoadingComponent /></div>
+            ) : "Sign In"}
           </button>
           {/* sign in link */}
           <p className="inline-block font-thin align-baseline text-sm text-gray-500">

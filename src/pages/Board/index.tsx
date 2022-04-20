@@ -75,6 +75,7 @@ const IndividualBoard = () => {
     React.useState<boolean>(false);
 
   const boardRef = React.useRef<HTMLInputElement>(null);
+  
 
   return (
     <>

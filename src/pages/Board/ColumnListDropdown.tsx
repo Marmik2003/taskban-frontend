@@ -2,13 +2,13 @@ import { Menu, Transition } from "@headlessui/react";
 import React from "react";
 
 interface ColumnListDropdownProps {
-  children: JSX.Element[];
+  children: React.ReactNode;
 }
 
 const ColumnListDropdown = ({ children }: ColumnListDropdownProps) => {
   return (
     <>
-      <Menu as="div" className="relative text-left inline-block lg:hidden">
+      <Menu as="div" className="relative text-left inline-block">
         <Menu.Button className="flex items-center justify-center w-6 h-6 ml-auto text-indigo-500 rounded hover:bg-indigo-500 hover:text-indigo-100">
           <ThreeDotsIcon />
         </Menu.Button>
@@ -22,9 +22,7 @@ const ColumnListDropdown = ({ children }: ColumnListDropdownProps) => {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-            {children.map((child, index) => (
-              <Menu.Item key={index}>{child}</Menu.Item>
-            ))}
+            {children}
           </Menu.Items>
         </Transition>
       </Menu>
