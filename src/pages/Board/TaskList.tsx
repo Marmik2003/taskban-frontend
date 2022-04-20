@@ -3,7 +3,13 @@ import { Draggable } from "react-beautiful-dnd";
 import { TaskType } from "./data";
 import Task from "./Task";
 
-export class TaskList extends Component<{ tasks: TaskType[] }> {
+interface TaskListProps {
+  tasks: TaskType[];
+  setTaskDialog: React.Dispatch<React.SetStateAction<TaskType>>;
+  setIsTaskDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export class TaskList extends Component<TaskListProps> {
   shouldComponentUpdate(nextProps: { tasks: TaskType[] }) {
     if (nextProps.tasks !== this.props.tasks) {
       return true;
@@ -21,6 +27,10 @@ export class TaskList extends Component<{ tasks: TaskType[] }> {
                 task={task}
                 provided={provided}
                 isDragging={snapshot.isDragging}
+                onClick={() => {
+                  this.props.setTaskDialog(task);
+                  this.props.setIsTaskDialogOpen(true);
+                }}
               />
             )}
           </Draggable>

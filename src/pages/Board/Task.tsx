@@ -7,13 +7,15 @@ interface TaskProps {
   task: TaskType
   provided: DraggableProvided
   isDragging: boolean
+  onClick: () => void
 }
 
-const Task = ({task, provided, isDragging}: TaskProps) => {
+const Task = ({task, provided, isDragging, onClick}: TaskProps) => {
   return (
     <div
       className={"flex flex-col items-start p-4 mt-3 bg-white rounded-lg cursor-pointer bg-opacity-90 hover:bg-opacity-100 no-scroll" + (isDragging ? " bg-indigo-100 transform rotate-12 transition duration-200" : "")}
       ref={provided.innerRef}
+      onDoubleClick={onClick}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
     >

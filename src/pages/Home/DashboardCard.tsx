@@ -1,4 +1,5 @@
 import React from "react";
+import LoadingComponent from "../../components/LoadingComponent";
 
 interface DashboardCardProps {
     title: string;
@@ -17,7 +18,9 @@ const DashboardCard = ({ title, num }: DashboardCardProps) => {
           {/* end top */}
           {/* bottom */}
           <div className="mt-8">
-            <h1 className="h5 num-4">{num}</h1>
+            <h1 className="h5 num-4">{num !== -1 ? num : (
+              <LoadingComponent />
+            )}</h1>
             <p>Task Count</p>
           </div>
           {/* end bottom */}
