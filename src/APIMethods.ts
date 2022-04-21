@@ -54,23 +54,30 @@ export const fireRequest = async (
   }
   const auth = token ? `Token ${localStorage.getItem("token")}` : "";
 
-  const response = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: auth,
-    },
-    body,
-  });
-
-  if (response.ok) {
-    if (method === "DELETE" || response.status === 204) return "true";
-
-    const json = await response.json();
-    return json;
-  } else {
-    const errorJson = await response.json();
-    throw new Error(errorJson);
+  try {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: auth,
+      },
+      body,
+    });
+  
+    if (response.ok) {
+      if (method === "DELETE" || response.status === 204) return "true";
+  
+      try {
+        return await response.json();
+      } catch (error) {
+        return response;
+      }
+    } else {
+      const errorJson = await response.json();
+      throw new Error(JSON.stringify(errorJson));
+    }
+  } catch (error) {
+    return "false";
   }
 };
 
@@ -88,7 +95,6 @@ export const register = (
   email: string,
   name: string
 ) => {
-  console.log(username, password, email, name, "API Fired");
   return fireRequest("users/register/", "POST", {
     username,
     email,
@@ -101,7 +107,7 @@ export const logout = () => {
   return fireRequest("users/logoutall/", "POST", {});
 };
 
-export const getUser = (id: Number) => {
+export const getUser = (id: number) => {
   return fireRequest(`users/${id}/`, "GET");
 };
 
@@ -114,7 +120,7 @@ export const getBoards = () => {
   return fireRequest("boards/", "GET");
 }
 
-export const getBoard = (id: Number) => {
+export const getBoard = (id: number) => {
   return fireRequest(`boards/${id}/`, "GET");
 }
 
@@ -122,6 +128,47 @@ export const createBoard = (name: string, description?: string) => {
   return fireRequest("boards/", "POST", { name, description });
 }
 
-export const updateBoard = (id: Number, name?: string, description?: string) => {
+export const updateBoard = (id: number, name?: string, description?: string) => {
   return fireRequest(`boards/${id}/`, "PATCH", { name, description });
+}
+
+// Column APIs
+export const addColumn = (boardId: number, title: string) => {
+  return fireRequest(`columns/`, "POST", { title, board: boardId });
+}
+
+export const updateColumn = (id: number, title: string) => {
+  return fireRequest(`columns/${id}/`, "PATCH", { title });
+}
+
+export const deleteColumn = (id: number) => {
+  return fireRequest(`columns/${id}/`, "DELETE");
+}
+
+export const getColumn = (coluumnId: number) => {
+  return fireRequest(`columns/${coluumnId}/`, "GET");
+}
+
+export const sortColumn = (order: number[]) => {
+  return fireRequest(`sort/column/`, "POST", { order });
+}
+
+export const getTask = (taskId: number) => {
+  return fireRequest(`tasks/${taskId}/`, "GET");
+}
+
+export const createTask = (title: string, column: number, labels: number[], assignees: number[], due_date: string, description?: string) => {
+  return fireRequest("tasks/", "POST", { title, description, column, labels, assignees, due_date });
+}
+
+export const updateTask = (id: number, title?: string, column?: number, labels?: number[], assignees?: number[], due_date?: string, description?: string) => {
+  return fireRequest(`tasks/${id}/`, "PATCH", { title, description, column, labels, assignees, due_date });
+}
+
+export const deleteTask = (id: number) => {
+  return fireRequest(`tasks/${id}/`, "DELETE");
+}
+
+export const sortTasks = (board: number, order: number[], tasks: Record<string, number[]>) => {
+  return fireRequest(`sort/task/`, "POST", { board, order, tasks });
 }

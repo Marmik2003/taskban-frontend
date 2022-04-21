@@ -1,11 +1,11 @@
 type UserAvatar = {
-  id: Number;
+  id: number;
   photo: string;
   name: string;
 }
 
 export type BoardMember = {
-  id: Number;
+  id: number;
   name: string;
   username?: string;
   email?: string;
@@ -13,41 +13,41 @@ export type BoardMember = {
 }
 
 export type Task = {
-  id: Number;
+  id: number;
   title: string;
-  description: string;
-  priority: 'L' | 'M' | 'H';
-  labels: Number[];
-  assignees: Number[];
-  task_order: Number;
-  column: Number;
+  description?: string;
+  priority?: 'L' | 'M' | 'H';
+  labels?: number[];
+  assignees: number[];
+  task_order?: number;
+  column: number;
   due_date: string;
-  finished: boolean;
-  created: Date;
-  modified: Date;
+  finished?: boolean;
+  created?: Date;
+  modified?: Date;
 }
 
-type TaskLabel = {
-  id: Number;
+export type TaskLabel = {
+  id: number;
   name: string;
   color: string;
-  board: Number;
+  board: number;
 }
 
 export type BoardColumn = {
-  id: Number;
+  id: number;
   title: string;
   tasks: Task[];
-  column_order: Number;
-  board: Number;
+  column_order: number;
+  board: number;
 }
 
 type Board = {
-  id: Number;
+  id: number;
   name: string;
   description: string;
-  owner?: Number;
-  members?: BoardMember[] | Number[];
+  owner?: number;
+  members?: BoardMember[] | number[];
   columns?: BoardColumn[];
   labels?: TaskLabel[];
 }

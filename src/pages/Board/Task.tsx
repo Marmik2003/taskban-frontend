@@ -1,7 +1,7 @@
 import React from "react";
 import { DraggableProvided } from "react-beautiful-dnd";
-import Tooltip from "../../components/Tooltip";
-import { TaskType } from "./data";
+import MembersList from "../../components/MembersList";
+import { Task as TaskType } from "../../types/Board";
 
 interface TaskProps {
   task: TaskType
@@ -13,13 +13,13 @@ interface TaskProps {
 const Task = ({task, provided, isDragging, onClick}: TaskProps) => {
   return (
     <div
-      className={"flex flex-col items-start p-4 mt-3 bg-white rounded-lg cursor-pointer bg-opacity-90 hover:bg-opacity-100 no-scroll" + (isDragging ? " bg-indigo-100 transform rotate-12 transition duration-200" : "")}
+      className={"relative flex flex-col items-start p-4 mt-3 bg-white rounded-lg cursor-pointer bg-opacity-90 hover:bg-opacity-100 no-scroll" + (isDragging ? " bg-indigo-100 transform rotate-12 transition duration-200" : "")}
       ref={provided.innerRef}
       onDoubleClick={onClick}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
     >
-      <button className="absolute top-0 right-0 items-center justify-center hidden w-5 h-5 mt-3 mr-2 text-gray-500 rounded hover:bg-gray-200 hover:text-gray-700 group-hover:flex">
+      <button className="absolute top-0 right-0 items-center flex justify-center w-5 h-5 mt-3 mr-2 text-gray-500 rounded hover:bg-gray-200 hover:text-gray-700 hover:flex">
         <ThreeDotsIcon />
       </button>
       {/* <span className="flex items-center h-6 px-3 text-xs font-semibold text-pink-500 bg-pink-100 rounded-full">
@@ -31,26 +31,16 @@ const Task = ({task, provided, isDragging, onClick}: TaskProps) => {
       <div className="flex relative items-center w-full mt-3 text-xs font-medium text-gray-400">
         <div className="flex items-center">
           <CalendarIcon />
-          <span className="ml-1 leading-none">{task.date}</span>
+          <span className="ml-1 leading-none">{task.due_date}</span>
         </div>
-        <div className="relative flex items-center ml-4">
+        {/* <div className="relative flex items-center ml-4">
           <CommentsIcon />
           <span className="ml-1 leading-none">{task.comments}</span>
-        </div>
+        </div> */}
         <div 
           className="ml-auto flex mb-3"
         >
-          {task.authors?.map((user, index) => (
-              <Tooltip tooltipText={user.name} key={index} idx={index}>
-                <img
-                  src={
-                    user.avatar ? user.avatar.photo : "/img/user.svg"
-                  }
-                  alt={user.name}
-                  className="w-6 h-6 rounded-full border-2 border-blue-50 shadow"
-                />
-              </Tooltip>
-            ))}
+          <MembersList memberIds={task.assignees} />
         </div>
       </div>
     </div>
@@ -84,6 +74,7 @@ const CalendarIcon = () => (<svg
 </svg>);
 
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CommentsIcon = () =>  (<svg
     className="relative w-4 h-4 text-gray-300 fill-current"
     xmlns="http://www.w3.org/2000/svg"
