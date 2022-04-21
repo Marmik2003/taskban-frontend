@@ -1,8 +1,8 @@
 import { DraggableLocation } from "react-beautiful-dnd";
 import { Task } from "../../types/Board";
 
-const reorder = (list: string[] | Task[], startIndex: number, endIndex: number) => {
-  const result = Array.from<string | Task>(list);
+const reorder = (list: {id: number, title: string}[] | Task[], startIndex: number, endIndex: number) => {
+  const result = Array.from<{id: number, title: string} | Task>(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
 
@@ -12,16 +12,16 @@ const reorder = (list: string[] | Task[], startIndex: number, endIndex: number) 
 export default reorder;
 
 export const reorderTaskmap = ({ taskmap, source, destination }: {taskmap: Record<string, Task[]>, source: DraggableLocation, destination: DraggableLocation}) => {
-  const current = [...taskmap[source.droppableId]];
-  const next = [...taskmap[destination.droppableId]];
+  const current = [...taskmap[source.droppableId.split('-')[1]]];
+  const next = [...taskmap[destination.droppableId.split('-')[1]]];
   const target = current[source.index];
 
   // moving to same list
-  if (source.droppableId === destination.droppableId) {
+  if (source.droppableId.split('-')[1] === destination.droppableId.split('-')[1]) {
     const reordered = reorder(current, source.index, destination.index);
     const result = {
       ...taskmap,
-      [source.droppableId]: reordered
+      [source.droppableId.split('-')[1]]: reordered
     };
     return {
       taskmap: result
@@ -37,8 +37,8 @@ export const reorderTaskmap = ({ taskmap, source, destination }: {taskmap: Recor
 
   const result = {
     ...taskmap,
-    [source.droppableId]: current,
-    [destination.droppableId]: next
+    [source.droppableId.split('-')[1]]: current,
+    [destination.droppableId.split('-')[1]]: next
   };
 
   return {

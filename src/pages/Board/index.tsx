@@ -13,7 +13,7 @@ import NotImplementedComponent from "../../components/NotImplementedComponent";
 const AddColumnDialogState = {
   id: 0,
   title: "",
-  board: 0
+  board: 0,
 };
 
 const TaskDialogState: Task = {
@@ -28,11 +28,16 @@ const TaskDialogState: Task = {
 const IndividualBoard = () => {
   const [loading, setLoading] = React.useState(true);
   const [boardName, setBoardName] = React.useState("");
-  const [boardMembers, setBoardMembers] =
-    React.useState<number[]>([]);
-  const [initialBoard, setInitialBoard] = React.useState<Record<string, Task[]>>({});
+  const [boardId, setBoardId] = React.useState(0);
+  const [boardMembers, setBoardMembers] = React.useState<number[]>([]);
+  const [initialBoard, setInitialBoard] = React.useState<
+    Record<string, Task[]>
+  >({});
   const [addColumnDialog, setAddColumnDialog] =
     React.useState<typeof AddColumnDialogState>(AddColumnDialogState);
+  const [columnsPair, setColumnsPair] = React.useState<
+    { id: number; title: string }[]
+  >([]);
   const [taskDialog, setTaskDialog] =
     React.useState<typeof TaskDialogState>(TaskDialogState);
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] =
@@ -53,21 +58,29 @@ const IndividualBoard = () => {
         ...AddColumnDialogState,
         board: board.id,
       });
-      setInitialBoard(board.columns!.reduce(
-        (acc, column) => ({
-          ...acc,
-          [column.id.toString()]: column.tasks,
-        }), {} as Record<string, Task[]>
-      ))
+      setBoardId(board.id);
+      setInitialBoard(
+        board.columns!.reduce(
+          (acc, column) => ({
+            ...acc,
+            [column.id.toString()]: column.tasks,
+          }),
+          {} as Record<string, Task[]>
+        )
+      );
+      setColumnsPair(
+        board.columns!.map((column) => ({
+          id: column.id,
+          title: column.title,
+        }))
+      );
       setLoading(false);
     });
   }, [id]);
 
   return (
     <>
-      {loading && (
-        <ScreenLoading />
-      )}
+      {loading && <ScreenLoading />}
       <div className="flex flex-col w-full overflow-auto">
         <div className="flex justify-between w-full items-center">
           <div className="flex w-full">
@@ -117,7 +130,10 @@ const IndividualBoard = () => {
               <button
                 className="text-gray-700 hover:text-white hover:bg-gray-700 border border-gray-700 rounded px-3 py-1 text-sm mr-2 focus:outline-none focus:shadow-outline"
                 onClick={() => {
-                  setAddColumnDialog(current => ({ ...AddColumnDialogState, board: current.board }));
+                  setAddColumnDialog((current) => ({
+                    ...AddColumnDialogState,
+                    board: current.board,
+                  }));
                   setIsAddColumnDialogOpen(true);
                 }}
               >
@@ -126,8 +142,10 @@ const IndividualBoard = () => {
             </div>
           </div>
         </div>
-        <Kanban 
-          initial={initialBoard} 
+        <Kanban
+          boardId={boardId}
+          initial={initialBoard}
+          columnsPair={columnsPair}
           setIsTaskDialogOpen={setIsTaskDialogOpen}
           setTaskDialog={setTaskDialog}
         />
@@ -137,10 +155,14 @@ const IndividualBoard = () => {
         setDialogState={setAddColumnDialog}
         isOpen={isAddColumnDialogOpen}
         closeDialog={() => setIsAddColumnDialogOpen(false)}
+        initialBoard={initialBoard}
         setInitialBoard={setInitialBoard}
+        setColumns={setColumnsPair}
       />
       <TaskDialog
-        task={(taskDialog)}
+        task={taskDialog}
+        setTask={setTaskDialog}
+        setColumns={setInitialBoard}
         isOpen={isTaskDialogOpen}
         onClose={() => {
           setTaskDialog(TaskDialogState);

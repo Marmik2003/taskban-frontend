@@ -19,7 +19,9 @@ interface ColumnDialogProps {
       board: number;
     }>
   >;
+  initialBoard: Record<string, Task[]>;
   setInitialBoard: React.Dispatch<React.SetStateAction<Record<string, Task[]>>>;
+  setColumns: React.Dispatch<React.SetStateAction<{id: number, title: string}[]>>;
 }
 
 const AddColumnDialog = ({
@@ -27,7 +29,9 @@ const AddColumnDialog = ({
   closeDialog,
   dialogState,
   setDialogState,
+  initialBoard,
   setInitialBoard,
+  setColumns,
 }: ColumnDialogProps) => {
   const [loading, setLoading] = React.useState(false); 
 
@@ -39,6 +43,14 @@ const AddColumnDialog = ({
         ...initialBoard,
         [res.id.toString()]: [],
       }))
+      setColumns(columns => ([
+        ...columns,
+        {
+          id: res.id,
+          title: res.title,
+        }
+      ]))
+      console.log(initialBoard, "initialBoard");
       closeDialog();
     }).catch(err => {
       console.error(err);

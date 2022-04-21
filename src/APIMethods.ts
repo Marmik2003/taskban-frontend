@@ -54,23 +54,30 @@ export const fireRequest = async (
   }
   const auth = token ? `Token ${localStorage.getItem("token")}` : "";
 
-  const response = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: auth,
-    },
-    body,
-  });
-
-  if (response.ok) {
-    if (method === "DELETE" || response.status === 204) return "true";
-
-    const json = await response.json();
-    return json;
-  } else {
-    const errorJson = await response.json();
-    throw new Error(JSON.stringify(errorJson));
+  try {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: auth,
+      },
+      body,
+    });
+  
+    if (response.ok) {
+      if (method === "DELETE" || response.status === 204) return "true";
+  
+      try {
+        return await response.json();
+      } catch (error) {
+        return response;
+      }
+    } else {
+      const errorJson = await response.json();
+      throw new Error(JSON.stringify(errorJson));
+    }
+  } catch (error) {
+    return "false";
   }
 };
 
@@ -88,7 +95,6 @@ export const register = (
   email: string,
   name: string
 ) => {
-  console.log(username, password, email, name, "API Fired");
   return fireRequest("users/register/", "POST", {
     username,
     email,
@@ -143,6 +149,10 @@ export const getColumn = (coluumnId: number) => {
   return fireRequest(`columns/${coluumnId}/`, "GET");
 }
 
+export const sortColumn = (order: number[]) => {
+  return fireRequest(`sort/column/`, "POST", { order });
+}
+
 export const getTask = (taskId: number) => {
   return fireRequest(`tasks/${taskId}/`, "GET");
 }
@@ -157,4 +167,8 @@ export const updateTask = (id: number, title?: string, column?: number, labels?:
 
 export const deleteTask = (id: number) => {
   return fireRequest(`tasks/${id}/`, "DELETE");
+}
+
+export const sortTasks = (board: number, order: number[], tasks: Record<string, number[]>) => {
+  return fireRequest(`sort/task/`, "POST", { board, order, tasks });
 }
