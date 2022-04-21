@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { TaskType } from "./data";
-import Task from "./Task";
+import { Task } from "../../types/Board";
+import TaskComponent from "./Task";
 
 interface TaskListProps {
-  tasks: TaskType[];
-  setTaskDialog: React.Dispatch<React.SetStateAction<TaskType>>;
+  tasks: Task[];
+  setTaskDialog: React.Dispatch<React.SetStateAction<Task>>;
   setIsTaskDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export class TaskList extends Component<TaskListProps> {
-  shouldComponentUpdate(nextProps: { tasks: TaskType[] }) {
+  shouldComponentUpdate(nextProps: { tasks: Task[] }) {
     if (nextProps.tasks !== this.props.tasks) {
       return true;
     }
@@ -23,7 +23,7 @@ export class TaskList extends Component<TaskListProps> {
         {this.props.tasks.map((task, index) => (
           <Draggable key={task.id.toString()} draggableId={task.id.toString()} index={index}>
             {(provided, snapshot) => (
-              <Task 
+              <TaskComponent
                 task={task}
                 provided={provided}
                 isDragging={snapshot.isDragging}

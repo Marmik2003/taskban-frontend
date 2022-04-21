@@ -13,6 +13,12 @@ const authProvider = {
       })
       .catch((err) => {
         this.isAuthenticated = false;
+        err = JSON.parse(err.message);
+        if (err.non_field_errors) {
+          toast.error(err.non_field_errors[0], {
+            type: toast.TYPE.ERROR,
+          });
+        }
       });
   },
   async signup(
@@ -31,8 +37,17 @@ const authProvider = {
         callback();
       })
       .catch((err) => {
-        toast.error(`Unable to register, ${(err as Error).message}`);
+        err = JSON.parse(err.message);
+        if (err.non_field_errors) {
+          toast.error(`Unable to register, ${err.non_field_errors[0]}`);
+        } else if (err.username) {
+          toast.error(`Unable to register, ${err.username[0]}`);
+        } else {
+          toast.error(`Unable to register, ${err[Object.keys(err)[0]]}`);
+        }
+        
         this.isAuthenticated = false;
+
       });
   },
   async signout(callback: VoidFunction) {

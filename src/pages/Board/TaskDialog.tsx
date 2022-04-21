@@ -1,9 +1,9 @@
 import React from "react";
 import DialogBox from "../../components/DialogBox";
-import { TaskType } from "./data";
+import { Task } from "../../types/Board";
 
 interface TaskDialogProps {
-  task: TaskType;
+  task: Task;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -31,11 +31,11 @@ const TaskDialog = ({ task, isOpen, onClose }: TaskDialogProps) => {
 
           <div className="mb-2">
             <label className="block text-sm font-medium text-gray-600">
-              Content
+              Description
             </label>
             <textarea
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-              value={task.content}
+              value={task.description}
             />
           </div>
 
@@ -45,7 +45,7 @@ const TaskDialog = ({ task, isOpen, onClose }: TaskDialogProps) => {
             </label>
             <input
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-              value={task.date}
+              value={task.due_date}
               type="date"
             />
           </div>
@@ -74,7 +74,7 @@ const TaskDialog = ({ task, isOpen, onClose }: TaskDialogProps) => {
           <div className="col-span-1 px-6 border-l md:border-l-0 md:border-t md:px-0 md:py-3">
             <h6 className="text-lg font-bold text-gray-600 py-2">Assignees</h6>
             <div className="flex flex-col">
-              {task.authors.map((assignee, index) => (
+              {/* {task.authors.map((assignee, index) => (
                 <div className="flex items-center" key={index}>
                   <img
                     src={
@@ -95,7 +95,7 @@ const TaskDialog = ({ task, isOpen, onClose }: TaskDialogProps) => {
 
                   </div>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
         )}

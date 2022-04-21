@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import LoadingComponent from '../components/LoadingComponent';
-import ScreenLoading from '../components/ScreenLoading';
 import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
@@ -33,9 +32,6 @@ const Register = () => {
     <div
       className="w-screen m-auto flex flex-col justify-center items-center mt-12 px-8"
     >
-      {loading && (
-        <ScreenLoading />
-      )}
       <div className="w-full max-w-md">
         <img src='/img/logo-monochrome.svg' alt='Taskban Logo' className='w-full mb-6 px-28' />
       </div>
@@ -118,6 +114,7 @@ const Register = () => {
           <button
             className="w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type='submit'
+            disabled={loading}
           >
             {loading ? (
               <div className="w-min mx-auto"><LoadingComponent /></div>

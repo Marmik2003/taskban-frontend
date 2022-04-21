@@ -1,17 +1,17 @@
 import React from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import { Task } from "../../types/Board";
 import Column from "./Column";
-import { TaskType } from "./data";
-import reorder, { reorderQuoteMap } from "./reorder";
+import reorder, { reorderTaskmap } from "./reorder";
 
 interface KanbanProps {
   initial?: {}
-  setTaskDialog: React.Dispatch<React.SetStateAction<TaskType>>;
+  setTaskDialog: React.Dispatch<React.SetStateAction<Task>>;
   setIsTaskDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Kanban = ({ initial = {}, setIsTaskDialogOpen, setTaskDialog }: KanbanProps) => {
-  const [columns, setColumns] = React.useState<Record<string, TaskType[]>>(initial);
+  const [columns, setColumns] = React.useState<Record<string, Task[]>>(initial);
   const [ordered, setOrdered] = React.useState<string[]>(Object.keys(initial));
   
   const onDragEnd = (result: DropResult) => {
@@ -25,11 +25,11 @@ const Kanban = ({ initial = {}, setIsTaskDialogOpen, setTaskDialog }: KanbanProp
       }
 
       const column = columns[result.source.droppableId];
-      const withQuoteRemoved = [...column];
-      withQuoteRemoved.splice(result.source.index, 1);
+      const withtaskRemoved = [...column];
+      withtaskRemoved.splice(result.source.index, 1);
       const newColumns = {
         ...columns,
-        [result.source.droppableId]: withQuoteRemoved
+        [result.source.droppableId]: withtaskRemoved
       };
       setColumns(newColumns)
       return;
@@ -64,13 +64,13 @@ const Kanban = ({ initial = {}, setIsTaskDialogOpen, setTaskDialog }: KanbanProp
       return;
     }
 
-    const data = reorderQuoteMap({
-      quoteMap: columns,
+    const data = reorderTaskmap({
+      taskmap: columns,
       source,
       destination
     });
 
-    setColumns((data.quoteMap as Record<string, TaskType[]>));
+    setColumns((data.taskmap as Record<string, Task[]>));
   };
 
   return (
@@ -93,7 +93,7 @@ const Kanban = ({ initial = {}, setIsTaskDialogOpen, setTaskDialog }: KanbanProp
                   <Column
                     key={key}
                     title={key}
-                    tasks={(columns[key] as TaskType[])}
+                    tasks={(columns[key] as Task[])}
                     index={index}
                     setTaskDialog={setTaskDialog}
                     setIsTaskDialogOpen={setIsTaskDialogOpen}

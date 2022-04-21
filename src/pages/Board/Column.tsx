@@ -1,15 +1,15 @@
 import { Menu } from "@headlessui/react";
 import React from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+import { Task } from "../../types/Board";
 import ColumnListDropdown from "./ColumnListDropdown";
-import { TaskType } from "./data";
 import TaskList from "./TaskList";
 
 interface ColumnProps {
   title: string;
-  tasks: TaskType[];
+  tasks: Task[];
   index: number;
-  setTaskDialog: React.Dispatch<React.SetStateAction<TaskType>>;
+  setTaskDialog: React.Dispatch<React.SetStateAction<Task>>;
   setIsTaskDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

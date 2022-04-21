@@ -39,7 +39,7 @@ const BoardCard = ({ board, onClick }: CardProps) => {
           {/* end top */}
           {/* bottom */}
           <div className="absolute bottom-0 mb-3 flex mt-4">
-            <MembersList memberIds={board.members as Number[]} />
+            <MembersList memberIds={board.members as number[]} />
           </div>
           {/* end bottom */}
         </div>

@@ -1,8 +1,8 @@
 import { DraggableLocation } from "react-beautiful-dnd";
-import { TaskType } from "./data";
+import { Task } from "../../types/Board";
 
-const reorder = (list: string[] | TaskType[], startIndex: number, endIndex: number) => {
-  const result = Array.from<string | TaskType>(list);
+const reorder = (list: string[] | Task[], startIndex: number, endIndex: number) => {
+  const result = Array.from<string | Task>(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
 
@@ -11,20 +11,20 @@ const reorder = (list: string[] | TaskType[], startIndex: number, endIndex: numb
 
 export default reorder;
 
-export const reorderQuoteMap = ({ quoteMap, source, destination }: {quoteMap: Record<string, TaskType[]>, source: DraggableLocation, destination: DraggableLocation}) => {
-  const current = [...quoteMap[source.droppableId]];
-  const next = [...quoteMap[destination.droppableId]];
+export const reorderTaskmap = ({ taskmap, source, destination }: {taskmap: Record<string, Task[]>, source: DraggableLocation, destination: DraggableLocation}) => {
+  const current = [...taskmap[source.droppableId]];
+  const next = [...taskmap[destination.droppableId]];
   const target = current[source.index];
 
   // moving to same list
   if (source.droppableId === destination.droppableId) {
     const reordered = reorder(current, source.index, destination.index);
     const result = {
-      ...quoteMap,
+      ...taskmap,
       [source.droppableId]: reordered
     };
     return {
-      quoteMap: result
+      taskmap: result
     };
   }
 
@@ -36,12 +36,12 @@ export const reorderQuoteMap = ({ quoteMap, source, destination }: {quoteMap: Re
   next.splice(destination.index, 0, target);
 
   const result = {
-    ...quoteMap,
+    ...taskmap,
     [source.droppableId]: current,
     [destination.droppableId]: next
   };
 
   return {
-    quoteMap: result
+    taskmap: result
   };
 };

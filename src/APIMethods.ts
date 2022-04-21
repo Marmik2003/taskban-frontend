@@ -70,7 +70,7 @@ export const fireRequest = async (
     return json;
   } else {
     const errorJson = await response.json();
-    throw new Error(errorJson);
+    throw new Error(JSON.stringify(errorJson));
   }
 };
 
@@ -101,7 +101,7 @@ export const logout = () => {
   return fireRequest("users/logoutall/", "POST", {});
 };
 
-export const getUser = (id: Number) => {
+export const getUser = (id: number) => {
   return fireRequest(`users/${id}/`, "GET");
 };
 
@@ -114,7 +114,7 @@ export const getBoards = () => {
   return fireRequest("boards/", "GET");
 }
 
-export const getBoard = (id: Number) => {
+export const getBoard = (id: number) => {
   return fireRequest(`boards/${id}/`, "GET");
 }
 
@@ -122,6 +122,39 @@ export const createBoard = (name: string, description?: string) => {
   return fireRequest("boards/", "POST", { name, description });
 }
 
-export const updateBoard = (id: Number, name?: string, description?: string) => {
+export const updateBoard = (id: number, name?: string, description?: string) => {
   return fireRequest(`boards/${id}/`, "PATCH", { name, description });
+}
+
+// Column APIs
+export const addColumn = (boardId: number, title: string) => {
+  return fireRequest(`columns/`, "POST", { title, board: boardId });
+}
+
+export const updateColumn = (id: number, title: string) => {
+  return fireRequest(`columns/${id}/`, "PATCH", { title });
+}
+
+export const deleteColumn = (id: number) => {
+  return fireRequest(`columns/${id}/`, "DELETE");
+}
+
+export const getColumn = (coluumnId: number) => {
+  return fireRequest(`columns/${coluumnId}/`, "GET");
+}
+
+export const getTask = (taskId: number) => {
+  return fireRequest(`tasks/${taskId}/`, "GET");
+}
+
+export const createTask = (title: string, column: number, labels: number[], assignees: number[], due_date: string, description?: string) => {
+  return fireRequest("tasks/", "POST", { title, description, column, labels, assignees, due_date });
+}
+
+export const updateTask = (id: number, title?: string, column?: number, labels?: number[], assignees?: number[], due_date?: string, description?: string) => {
+  return fireRequest(`tasks/${id}/`, "PATCH", { title, description, column, labels, assignees, due_date });
+}
+
+export const deleteTask = (id: number) => {
+  return fireRequest(`tasks/${id}/`, "DELETE");
 }

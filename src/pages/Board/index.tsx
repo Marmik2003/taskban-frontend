@@ -1,70 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Kanban from "./Kanban";
-import { authorQuoteMap, TaskType } from "./data";
-import { BoardMember } from "../../types/Board";
+import Board, { Task } from "../../types/Board";
 import AddColumnDialog from "./AddColumnDialog";
 import Editable from "../../components/Editable";
 import TaskDialog from "./TaskDialog";
+import { useParams } from "react-router-dom";
+import { getBoard } from "../../APIMethods";
+import ScreenLoading from "../../components/ScreenLoading";
+import MembersList from "../../components/MembersList";
+import NotImplementedComponent from "../../components/NotImplementedComponent";
 
 const AddColumnDialogState = {
   id: 0,
   title: "",
+  board: 0
 };
 
-const TaskDialogState: TaskType = {
+const TaskDialogState: Task = {
   id: 0,
   title: "",
-  content: "",
-  authors: [] as BoardMember[],
-  date: "",
-  comments: 4,
+  description: "",
+  assignees: [] as number[],
+  due_date: "",
+  column: 0,
 };
 
-const BoardPersons: BoardMember[] = [
-  {
-    id: 1,
-    name: "John Doe",
-    email: "abc@xyz.com",
-    avatar: {
-      id: 1,
-      name: "John Doe",
-      photo:
-        "https://demos.creative-tim.com/notus-js/assets/img/team-1-800x800.jpg",
-    },
-  },
-  {
-    id: 2,
-    name: "William Folks",
-    email: "will.folks@taskban.co",
-    avatar: {
-      id: 2,
-      name: "William Folks",
-      photo:
-        "https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg",
-    },
-  },
-  {
-    id: 3,
-    name: "Charles Kilber",
-    email: "c.k@taskban.co",
-    avatar: {
-      id: 3,
-      name: "Charles Kilber",
-      photo:
-        "https://demos.creative-tim.com/notus-js/assets/img/team-3-800x800.jpg",
-    },
-  },
-  {
-    id: 4,
-    name: "Donna Hughes",
-    email: "d.h@taskban.co",
-  },
-];
-
 const IndividualBoard = () => {
+  const [loading, setLoading] = React.useState(true);
   const [boardName, setBoardName] = React.useState("");
-  const [boardMembers /*, setBoardMembers*/] =
-    React.useState<BoardMember[]>(BoardPersons);
+  const [boardMembers, setBoardMembers] =
+    React.useState<number[]>([]);
+  const [initialBoard, setInitialBoard] = React.useState<Record<string, Task[]>>({});
   const [addColumnDialog, setAddColumnDialog] =
     React.useState<typeof AddColumnDialogState>(AddColumnDialogState);
   const [taskDialog, setTaskDialog] =
@@ -75,14 +41,36 @@ const IndividualBoard = () => {
     React.useState<boolean>(false);
 
   const boardRef = React.useRef<HTMLInputElement>(null);
-  
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    setLoading(true);
+    getBoard(Number(id)).then((board: Board) => {
+      setBoardName(board.name);
+      setBoardMembers(board.members as number[]);
+      setAddColumnDialog({
+        ...AddColumnDialogState,
+        board: board.id,
+      });
+      setInitialBoard(board.columns!.reduce(
+        (acc, column) => ({
+          ...acc,
+          [column.id.toString()]: column.tasks,
+        }), {} as Record<string, Task[]>
+      ))
+      setLoading(false);
+    });
+  }, [id]);
 
   return (
     <>
+      {loading && (
+        <ScreenLoading />
+      )}
       <div className="flex flex-col w-full overflow-auto">
         <div className="flex justify-between w-full items-center">
           <div className="flex w-full">
-            {/* <h4 className="text-xl font-bold">Board</h4> */}
             <Editable
               className="text-xl font-bold"
               placeholder="Board"
@@ -105,20 +93,11 @@ const IndividualBoard = () => {
               <button
                 className="text-gray-700 hover:text-white hover:bg-gray-700 border border-gray-700 rounded px-3 py-1 text-sm mx-2 focus:outline-none focus:shadow-outline"
                 id="invite-button"
+                onClick={NotImplementedComponent}
               >
                 <i className="far fa-user-plus"></i> Invite
               </button>
-              {boardMembers.map((user, index) => (
-                <img
-                  src={user.avatar ? user.avatar.photo : "/img/user.svg"}
-                  alt={user.name}
-                  className={
-                    "w-8 h-8 rounded-full border-2 border-blue-50 shadow" +
-                    (index > 0 ? " -ml-3" : "")
-                  }
-                  key={index}
-                />
-              ))}
+              <MembersList memberIds={boardMembers} />
             </div>
           </div>
         </div>
@@ -128,6 +107,7 @@ const IndividualBoard = () => {
             <button
               className="text-gray-700 hover:text-white hover:bg-gray-700 border border-gray-700 rounded px-3 py-1 text-sm focus:outline-none focus:shadow-outline"
               id="filter-button"
+              onClick={NotImplementedComponent}
             >
               <i className="far fa-filter"></i> Filter
             </button>
@@ -137,7 +117,7 @@ const IndividualBoard = () => {
               <button
                 className="text-gray-700 hover:text-white hover:bg-gray-700 border border-gray-700 rounded px-3 py-1 text-sm mr-2 focus:outline-none focus:shadow-outline"
                 onClick={() => {
-                  setAddColumnDialog(AddColumnDialogState);
+                  setAddColumnDialog(current => ({ ...AddColumnDialogState, board: current.board }));
                   setIsAddColumnDialogOpen(true);
                 }}
               >
@@ -147,7 +127,7 @@ const IndividualBoard = () => {
           </div>
         </div>
         <Kanban 
-          initial={authorQuoteMap} 
+          initial={initialBoard} 
           setIsTaskDialogOpen={setIsTaskDialogOpen}
           setTaskDialog={setTaskDialog}
         />
@@ -157,9 +137,10 @@ const IndividualBoard = () => {
         setDialogState={setAddColumnDialog}
         isOpen={isAddColumnDialogOpen}
         closeDialog={() => setIsAddColumnDialogOpen(false)}
+        setInitialBoard={setInitialBoard}
       />
       <TaskDialog
-        task={(taskDialog as TaskType)}
+        task={(taskDialog)}
         isOpen={isTaskDialogOpen}
         onClose={() => {
           setTaskDialog(TaskDialogState);

@@ -5,14 +5,14 @@ import LoadingComponent from "./LoadingComponent";
 import Tooltip from "./Tooltip";
 
 interface MembersListProps {
-  memberIds?: Number[];
+  memberIds?: number[];
 }
 
 const MembersList = ({ memberIds }: MembersListProps) => {
   const [loading, setLoading] = React.useState(true);
   const [boardMembers, setBoardMembers] = React.useState<BoardMember[]>([]);
 
-  const _getUser = async (id: Number) => {
+  const _getUser = async (id: number) => {
     const user = await getUser(id);
     return user;
   };
