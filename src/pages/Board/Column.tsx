@@ -1,14 +1,15 @@
 import { Menu } from "@headlessui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { toast } from "react-toastify";
-import { deleteColumn } from "../../APIMethods";
+import { deleteColumn, updateColumn } from "../../APIMethods";
+import Editable from "../../components/Editable";
 import { Task } from "../../types/Board";
 import ColumnListDropdown from "./ColumnListDropdown";
 import TaskList from "./TaskList";
 
 interface ColumnProps {
-  id: number;
+  colId: number;
   title: string;
   tasks: Task[];
   index: number;
@@ -19,7 +20,7 @@ interface ColumnProps {
 }
 
 const Column = ({
-  id,
+  colId,
   title,
   tasks,
   index,
@@ -28,6 +29,14 @@ const Column = ({
   setColumns,
   setColumnsPair,
 }: ColumnProps) => {
+  const [colTitle, setColTitle] = React.useState(title);
+
+  useEffect(() => {
+    updateColumn(colId, colTitle);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [colTitle]);
+
+  const colRef = React.useRef<HTMLInputElement>(null);
 
   const handleDelete = (id: number) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this column?");
@@ -59,7 +68,24 @@ const Column = ({
         >
           <div className="flex items-center flex-shrink-0 justify-between h-10 px-2">
             <div className="flex">
-              <span className="block text-sm font-semibold">{title}</span>
+              <Editable
+                className="block text-sm font-semibold"
+                type="input"
+                text={colTitle}
+                childRef={colRef}
+              >
+                <input
+                  className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  ref={colRef}
+                  value={colTitle}
+                  onChange={(e) => {
+                    setColTitle(e.target.value);
+                    setColumnsPair(columnsPair => columnsPair.map(({ id, title }) => id === colId ? { id, title: e.target.value } : { id, title }));
+                  }}
+                />
+              </Editable>
+
               <span className="flex items-center justify-center w-5 h-5 ml-2 text-sm font-semibold text-indigo-500 bg-white rounded bg-opacity-30">
                 {tasks.length ?? 0}
               </span>
@@ -73,7 +99,7 @@ const Column = ({
                     title: "",
                     description: "",
                     due_date: "",
-                    column: id,
+                    column: colId,
                     assignees: [],
                     
                   });
@@ -85,7 +111,7 @@ const Column = ({
               <ColumnListDropdown>
                 <Menu.Item>
                   <button
-                    onClick={() => handleDelete(id)}
+                    onClick={() => handleDelete(colId)}
                     className="group rounded-md flex space-x-2 items-center w-full px-2 py-2 text-sm text-gray-600 hover:bg-gray-600 hover:text-white"
                     title="Delete"
                   >
@@ -96,7 +122,7 @@ const Column = ({
             </div>
           </div>
           <Droppable
-            droppableId={`task-${id}`}
+            droppableId={`column-${colId}`}
             type="TASK"
             ignoreContainerClipping={false}
             isDropDisabled={false}

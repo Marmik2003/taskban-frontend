@@ -7,6 +7,7 @@ import SingleTask from "./SingleTask";
 interface TasksProps {
   tasks: DashboardType;
   loading: boolean;
+  handleCompleteTask: (task: Task) => void;
 }
 
 type taskTabType = {
@@ -29,7 +30,7 @@ const taskTabs: taskTabType[] = [
   },
 ];
 
-const Tasks = ({ tasks, loading }: TasksProps) => {
+const Tasks = ({ tasks, loading, handleCompleteTask }: TasksProps) => {
   const [currentTab, setCurrentTab] = React.useState<
     "incomplete_tasks" | "completed_tasks" | "overdue_tasks"
   >("incomplete_tasks");
@@ -67,7 +68,7 @@ const Tasks = ({ tasks, loading }: TasksProps) => {
           </div>
         ) : (
           currentTasks.length ? currentTasks.map((task, index) => (
-            <SingleTask key={index} task={task} />
+            <SingleTask key={index} task={task} handleCompleteTask={handleCompleteTask} />
           )) : (
             <div className="flex flex-col items-center justify-center w-full h-full">
               <h1 className="text-xl font-bold text-center">No Tasks</h1>

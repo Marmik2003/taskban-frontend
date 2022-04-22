@@ -1,6 +1,7 @@
 import React from "react";
 import { DraggableProvided } from "react-beautiful-dnd";
 import MembersList from "../../components/MembersList";
+import PriorityText from "../../components/PriorityText";
 import { Task as TaskType } from "../../types/Board";
 
 interface TaskProps {
@@ -15,13 +16,10 @@ const Task = ({task, provided, isDragging, onClick}: TaskProps) => {
     <div
       className={"relative flex flex-col items-start p-4 mt-3 bg-white rounded-lg cursor-pointer bg-opacity-90 hover:bg-opacity-100 no-scroll" + (isDragging ? " bg-indigo-100 transform rotate-12 transition duration-200" : "")}
       ref={provided.innerRef}
-      onDoubleClick={onClick}
+      onClick={onClick}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
     >
-      <button className="absolute top-0 right-0 items-center flex justify-center w-5 h-5 mt-3 mr-2 text-gray-500 rounded hover:bg-gray-200 hover:text-gray-700 hover:flex">
-        <ThreeDotsIcon />
-      </button>
       {/* <span className="flex items-center h-6 px-3 text-xs font-semibold text-pink-500 bg-pink-100 rounded-full">
         Design
       </span> */}
@@ -33,10 +31,9 @@ const Task = ({task, provided, isDragging, onClick}: TaskProps) => {
           <CalendarIcon />
           <span className="ml-1 leading-none">{task.due_date}</span>
         </div>
-        {/* <div className="relative flex items-center ml-4">
-          <CommentsIcon />
-          <span className="ml-1 leading-none">{task.comments}</span>
-        </div> */}
+        <div className="relative flex items-center text-xs ml-4">
+          <PriorityText priority={task.priority!} />
+        </div>
         <div 
           className="ml-auto flex mb-3"
         >
@@ -50,6 +47,7 @@ const Task = ({task, provided, isDragging, onClick}: TaskProps) => {
 export default Task;
 
 // Icons
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ThreeDotsIcon = () => {
   return <svg
     className="w-4 h-4 fill-current"
