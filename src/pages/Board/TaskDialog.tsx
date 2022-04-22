@@ -4,6 +4,7 @@ import { createTask, updateTask } from "../../APIMethods";
 import DialogBox from "../../components/DialogBox";
 import { useAuth } from "../../context/AuthContext";
 import { Task } from "../../types/Board";
+import PriorityDropdown from "./PriorityDropdown";
 
 interface TaskDialogProps {
   task: Task;
@@ -13,7 +14,7 @@ interface TaskDialogProps {
   onClose: () => void;
 }
 
-const TaskDialog = ({ task, setTask, setColumns, isOpen, onClose }: TaskDialogProps) => {
+const TaskDialog = ({ task, setTask, isOpen, onClose, setColumns,  }: TaskDialogProps) => {
   const [loading, setLoading] = React.useState(false);
 
   const { user } = useAuth();
@@ -47,7 +48,7 @@ const TaskDialog = ({ task, setTask, setColumns, isOpen, onClose }: TaskDialogPr
       });
     } else {
       setLoading(true);
-      updateTask(taskId, task.title, task.column, [], undefined, task.due_date, task.description).then((res: Task) => {
+      updateTask(taskId, task.title, task.column, [], undefined, task.due_date, task.description, task.finished, task.priority).then((res: Task) => {
         setColumns(columns => ({
           ...columns,
           [task.column.toString()]: [
@@ -122,6 +123,16 @@ const TaskDialog = ({ task, setTask, setColumns, isOpen, onClose }: TaskDialogPr
               }}
               type="date"
               required
+            />
+          </div>
+
+          <div className="mb-2">
+            <label className="block text-sm font-medium text-gray-600">
+              Priority 
+            </label>
+            <PriorityDropdown
+              priority={task.priority!}
+              setTask={setTask}
             />
           </div>
 

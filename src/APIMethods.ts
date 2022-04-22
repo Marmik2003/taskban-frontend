@@ -161,8 +161,8 @@ export const createTask = (title: string, column: number, labels: number[], assi
   return fireRequest("tasks/", "POST", { title, description, column, labels, assignees, due_date });
 }
 
-export const updateTask = (id: number, title?: string, column?: number, labels?: number[], assignees?: number[], due_date?: string, description?: string) => {
-  return fireRequest(`tasks/${id}/`, "PATCH", { title, description, column, labels, assignees, due_date });
+export const updateTask = (id: number, title?: string, column?: number, labels?: number[], assignees?: number[], due_date?: string, description?: string, finished?: boolean, priority?: "L" | "M" | "H") => {
+  return fireRequest(`tasks/${id}/`, "PATCH", { title, description, column, labels, assignees, due_date, finished, priority });
 }
 
 export const deleteTask = (id: number) => {

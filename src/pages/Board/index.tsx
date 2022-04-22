@@ -5,7 +5,7 @@ import AddColumnDialog from "./AddColumnDialog";
 import Editable from "../../components/Editable";
 import TaskDialog from "./TaskDialog";
 import { useParams } from "react-router-dom";
-import { getBoard } from "../../APIMethods";
+import { getBoard, updateBoard } from "../../APIMethods";
 import ScreenLoading from "../../components/ScreenLoading";
 import MembersList from "../../components/MembersList";
 import NotImplementedComponent from "../../components/NotImplementedComponent";
@@ -28,7 +28,6 @@ const TaskDialogState: Task = {
 const IndividualBoard = () => {
   const [loading, setLoading] = React.useState(true);
   const [boardName, setBoardName] = React.useState("");
-  const [boardId, setBoardId] = React.useState(0);
   const [boardMembers, setBoardMembers] = React.useState<number[]>([]);
   const [initialBoard, setInitialBoard] = React.useState<
     Record<string, Task[]>
@@ -58,7 +57,6 @@ const IndividualBoard = () => {
         ...AddColumnDialogState,
         board: board.id,
       });
-      setBoardId(board.id);
       setInitialBoard(
         board.columns!.reduce(
           (acc, column) => ({
@@ -77,6 +75,14 @@ const IndividualBoard = () => {
       setLoading(false);
     });
   }, [id]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      updateBoard(Number(id), boardName)
+    }, 1000);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [boardName])
 
   return (
     <>
@@ -143,7 +149,7 @@ const IndividualBoard = () => {
           </div>
         </div>
         <Kanban
-          boardId={boardId}
+          boardId={Number(id)}
           initial={initialBoard}
           columnsPair={columnsPair}
           setIsTaskDialogOpen={setIsTaskDialogOpen}

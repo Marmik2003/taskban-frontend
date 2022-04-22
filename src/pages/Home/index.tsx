@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
+import { updateTask } from "../../APIMethods";
 import { dashboardCount } from "../../APIMethods";
 import { useAuth } from "../../context/AuthContext";
+import { Task } from "../../types/Board";
 import { DashboardType } from "../../types/Dashboard";
 import DashboardCard from "./DashboardCard";
 import HeaderTitle from "./HeaderTitle";
@@ -20,21 +22,38 @@ const Home = () => {
 
   useEffect(() => {
     document.title = "Taskban - Dashboard";
-    setLoading(true);
     dashboardCount().then((res) => {
+      setLoading(false);
+      console.log(res);
       setDashboard(res);
     }).catch((err) => {
       console.log(err);
       toast.error("Error fetching dashboard data");
-    }).finally(() => {
-      setLoading(false);
-    });
+    })
 
     return () => {
       document.title = "Taskban";
     }
   }, [])
 
+  const handleCompleteTask = (task: Task) => {
+    setLoading(true);
+    updateTask(task.id, undefined, undefined, undefined, undefined, undefined, undefined, true).then((res) => {
+      setDashboard((prevState) => {
+        const newDashboard = {
+          ...prevState,
+          completed_tasks: [...prevState.completed_tasks, {...task, finished: true}],
+          incomplete_tasks: prevState.incomplete_tasks.filter((t) => t.id !== task.id),
+        }
+        return newDashboard;
+      });
+    }).catch((err) => {
+      console.log(err);
+      toast.error("Error completing task");
+    }).finally(() => {
+      setLoading(false);
+    });
+  }
   
   return (
     <>
@@ -47,6 +66,7 @@ const Home = () => {
 
       <Tasks 
         tasks={dashboard}
+        handleCompleteTask={handleCompleteTask}
         loading={loading}  
       />
     </>
