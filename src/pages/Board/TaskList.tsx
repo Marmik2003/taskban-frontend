@@ -7,6 +7,7 @@ interface TaskListProps {
   tasks: Task[];
   setTaskDialog: React.Dispatch<React.SetStateAction<Task>>;
   setIsTaskDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleArchive: (task: Task) => void;
 }
 
 export class TaskList extends Component<TaskListProps> {
@@ -26,6 +27,7 @@ export class TaskList extends Component<TaskListProps> {
               <TaskComponent
                 task={task}
                 provided={provided}
+                handleArchive={this.props.handleArchive}
                 isDragging={snapshot.isDragging}
                 onClick={() => {
                   this.props.setTaskDialog(task);

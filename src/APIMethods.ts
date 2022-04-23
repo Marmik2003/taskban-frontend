@@ -77,7 +77,7 @@ export const fireRequest = async (
       throw new Error(JSON.stringify(errorJson));
     }
   } catch (error) {
-    return "false";
+    throw error;
   }
 };
 
@@ -111,9 +111,21 @@ export const getUser = (id: number) => {
   return fireRequest(`users/${id}/`, "GET");
 };
 
+export const getUserByUsername = (username: string) => {
+  return fireRequest(`users/get_by_username/${username}/`, "GET");
+};
+
+export const inviteUser = (users: number[], board: number) => {
+  return fireRequest(`boards/${board}/invite_member/`, "POST", {users});
+};
+
+export const removeUser = (username: string, board: number) => {
+  return fireRequest(`boards/${board}/remove_member/`, "POST", {username});
+};
+
 export const dashboardCount = () => {
   return fireRequest("dashboard/", "GET");
-}
+};
 
 // Board APIs
 export const getBoards = () => {
@@ -171,4 +183,12 @@ export const deleteTask = (id: number) => {
 
 export const sortTasks = (board: number, order: number[], tasks: Record<string, number[]>) => {
   return fireRequest(`sort/task/`, "POST", { board, order, tasks });
+}
+
+export const changeAssignees = (assignees: number[], task: number) => {
+  return fireRequest(`tasks/${task}/`, "PATCH", { assignees });
+}
+
+export const archiveTask = (task: number) => {
+  return fireRequest(`tasks/${task}/archive/`, "DELETE");
 }

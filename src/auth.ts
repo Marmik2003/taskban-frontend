@@ -13,6 +13,7 @@ const authProvider = {
       })
       .catch((err) => {
         this.isAuthenticated = false;
+        console.log(err, "error");
         err = JSON.parse(err.message);
         if (err.non_field_errors) {
           toast.error(err.non_field_errors[0], {

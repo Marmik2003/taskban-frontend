@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { LayoutContext } from "../context/LayoutContext";
+import NotImplementedComponent from "./NotImplementedComponent";
 
 const Navbar = () => {
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -13,31 +14,42 @@ const Navbar = () => {
   const { isUserMenuOpen, setIsUserMenuOpen } = useContext(LayoutContext);
   const [isUserBoxOpen, setIsUserBoxOpen] = useState(false);
 
+  const userMenuRender = useRef(false);
+  const userBoxRender = useRef(false);
+
   useEffect(() => {
-    if (userMenuRef.current?.classList.contains("md:hidden")) {
-      userMenuRef.current?.classList.remove("md:hidden");
-      userMenuRef.current?.classList.add("animate__fadeIn");
+    if (userMenuRender.current) {
+      if (userMenuRef.current?.classList.contains("md:hidden")) {
+        userMenuRef.current?.classList.remove("md:hidden");
+        userMenuRef.current?.classList.add("animate__fadeIn");
+      } else {
+        userMenuRef.current?.classList.remove("animate__fadeIn");
+        userMenuRef.current?.classList.add("animate__fadeOut");
+        setTimeout(() => {
+          userMenuRef.current?.classList.remove("animate__fadeOut");
+          userMenuRef.current?.classList.add("md:hidden");
+        }, 300);
+      }
     } else {
-      userMenuRef.current?.classList.remove("animate__fadeIn");
-      userMenuRef.current?.classList.add("animate__fadeOut");
-      setTimeout(() => {
-        userMenuRef.current?.classList.remove("animate__fadeOut");
-        userMenuRef.current?.classList.add("md:hidden");
-      }, 300);
+      userMenuRender.current = true;
     }
   }, [isUserMenuOpen]);
 
   useEffect(() => {
-    if (userBoxRef.current?.classList.contains("hidden")) {
-      userBoxRef.current?.classList.remove("hidden");
-      userBoxRef.current?.classList.add("animate__fadeIn");
+    if (userBoxRender.current) {
+      if (userBoxRef.current?.classList.contains("hidden")) {
+        userBoxRef.current?.classList.remove("hidden");
+        userBoxRef.current?.classList.add("animate__fadeIn");
+      } else {
+        userBoxRef.current?.classList.remove("animate__fadeIn");
+        userBoxRef.current?.classList.add("animate__fadeOut");
+        setTimeout(() => {
+          userBoxRef.current?.classList.remove("animate__fadeOut");
+          userBoxRef.current?.classList.add("hidden");
+        }, 300);
+      } 
     } else {
-      userBoxRef.current?.classList.remove("animate__fadeIn");
-      userBoxRef.current?.classList.add("animate__fadeOut");
-      setTimeout(() => {
-        userBoxRef.current?.classList.remove("animate__fadeOut");
-        userBoxRef.current?.classList.add("hidden");
-      }, 300);
+      userBoxRender.current = true;
     }
   }, [isUserBoxOpen]);
 
@@ -53,7 +65,7 @@ const Navbar = () => {
       {/* navbar content */}
       <div
         id="navbar"
-        className="animate__animated md:fixed md:top-0 md:w-full md:left-0 md:mt-16 md:border-t md:border-b md:border-gray-200 md:p-10 md:bg-white flex-1 pl-3 flex flex-wrap justify-between items-center md:flex-col md:items-center flex-row-reverse"
+        className="animate__animated md:fixed md:top-0 md:w-full md:left-0 md:mt-16 md:border-t md:border-b md:border-gray-200 md:p-10 md:bg-white flex-1 pl-3 flex flex-wrap justify-between items-center md:flex-col md:items-center flex-row-reverse md:hidden"
         ref={userMenuRef}
       >
         {/* right */}
@@ -80,17 +92,17 @@ const Navbar = () => {
             </button>
             <button className="hidden fixed top-0 left-0 z-10 w-full h-full menu-overflow" />
             <div 
-              className="text-gray-500 menu md:mt-10 md:w-full rounded bg-white shadow-md absolute z-20 right-0 w-40 mt-5 py-2 animate__animated animate__faster animate__fadeIn"
+              className="text-gray-500 menu md:mt-10 md:w-full rounded bg-white shadow-md absolute z-20 right-0 w-40 mt-5 py-2 animate__animated animate__faster hidden"
               ref={userBoxRef}
             >
               {/* item */}
-              <a
-                className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out"
-                href="/"
+              <button
+                className="px-4 py-2 w-full text-left block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out"
+                onClick={NotImplementedComponent}
               >
                 <i className="fad fa-user-edit text-xs mr-1" />
                 my profile
-              </a>
+              </button>
               {/* end item */}
               <hr />
               {/* item */}

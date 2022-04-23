@@ -2,7 +2,7 @@ import { Menu } from "@headlessui/react";
 import React, { useEffect } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { toast } from "react-toastify";
-import { deleteColumn, updateColumn } from "../../APIMethods";
+import { archiveTask, deleteColumn, updateColumn } from "../../APIMethods";
 import Editable from "../../components/Editable";
 import { Task } from "../../types/Board";
 import ColumnListDropdown from "./ColumnListDropdown";
@@ -49,6 +49,23 @@ const Column = ({
           return newColumns;
         });
         toast.success("Column deleted successfully");
+      }).catch(err => {
+        console.error(err);
+        err = JSON.parse(err.message);
+        toast.error(err[Object.keys(err)[0]]);
+      });
+    }
+  }
+
+  const handleTaskArchive = (task: Task) => {
+    const confirmArchive = window.confirm("Are you sure you want to archive this task?");
+    if (confirmArchive) {
+      archiveTask(task.id).then(() => {
+        setColumns(columns => ({
+          ...columns,
+          [task.column]: columns[task.column].filter(({ id }) => id !== task.id),
+        }));
+        toast.success("Task archived successfully");
       }).catch(err => {
         console.error(err);
         err = JSON.parse(err.message);
@@ -112,7 +129,7 @@ const Column = ({
                 <Menu.Item>
                   <button
                     onClick={() => handleDelete(colId)}
-                    className="group rounded-md flex space-x-2 items-center w-full px-2 py-2 text-sm text-gray-600 hover:bg-gray-600 hover:text-white"
+                    className="group rounded-md flex space-x-2 items-center w-full px-2 py-2 text-sm text-indigo-500 hover:bg-indigo-500 hover:text-white"
                     title="Delete"
                   >
                     <i className="fas fa-trash-alt mr-2"></i> Delete
@@ -138,6 +155,7 @@ const Column = ({
                   tasks={tasks}
                   setTaskDialog={setTaskDialog}
                   setIsTaskDialogOpen={setIsTaskDialogOpen}
+                  handleArchive={handleTaskArchive}
                 />
                 {provided.placeholder}
               </div>

@@ -9,6 +9,8 @@ import { getBoard, updateBoard } from "../../APIMethods";
 import ScreenLoading from "../../components/ScreenLoading";
 import MembersList from "../../components/MembersList";
 import NotImplementedComponent from "../../components/NotImplementedComponent";
+import InviteDialog from "./InviteDialog";
+import { useAuth } from "../../context/AuthContext";
 
 const AddColumnDialogState = {
   id: 0,
@@ -29,6 +31,7 @@ const IndividualBoard = () => {
   const [loading, setLoading] = React.useState(true);
   const [boardName, setBoardName] = React.useState("");
   const [boardMembers, setBoardMembers] = React.useState<number[]>([]);
+  const [boardOwner, setBoardOwner] = React.useState<number>();
   const [initialBoard, setInitialBoard] = React.useState<
     Record<string, Task[]>
   >({});
@@ -43,10 +46,13 @@ const IndividualBoard = () => {
     React.useState<boolean>(false);
   const [isTaskDialogOpen, setIsTaskDialogOpen] =
     React.useState<boolean>(false);
+  const [isManageMemberDialogOpen, setIsManageMemberDialogOpen] =
+    React.useState<boolean>(false);
 
   const boardRef = React.useRef<HTMLInputElement>(null);
 
   const { id } = useParams();
+  const { user } = useAuth();
 
   useEffect(() => {
     setLoading(true);
@@ -72,17 +78,18 @@ const IndividualBoard = () => {
           title: column.title,
         }))
       );
+      setBoardOwner(board.owner);
       setLoading(false);
     });
   }, [id]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      updateBoard(Number(id), boardName)
+      updateBoard(Number(id), boardName);
     }, 1000);
     return () => clearTimeout(timer);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [boardName])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [boardName]);
 
   return (
     <>
@@ -109,13 +116,15 @@ const IndividualBoard = () => {
           </div>
           <div className="flex w-full place-content-end">
             <div className="flex items-center">
-              <button
-                className="text-gray-700 hover:text-white hover:bg-gray-700 border border-gray-700 rounded px-3 py-1 text-sm mx-2 focus:outline-none focus:shadow-outline"
-                id="invite-button"
-                onClick={NotImplementedComponent}
-              >
-                <i className="far fa-user-plus"></i> Invite
-              </button>
+              {boardOwner === user!.id && (
+                <button
+                  className="text-gray-700 hover:text-white hover:bg-gray-700 border border-gray-700 rounded px-3 py-1 text-sm mx-2 focus:outline-none focus:shadow-outline"
+                  id="manage-button"
+                  onClick={() => setIsManageMemberDialogOpen(true)}
+                >
+                  <i className="far fa-user-plus"></i> Manage
+                </button>
+              )}
               <MembersList memberIds={boardMembers} />
             </div>
           </div>
@@ -175,6 +184,15 @@ const IndividualBoard = () => {
           setIsTaskDialogOpen(false);
         }}
       />
+      {boardOwner === user!.id && (
+        <InviteDialog
+        isOpen={isManageMemberDialogOpen}
+        onClose={() => setIsManageMemberDialogOpen(false)}
+        boardId={Number(id)}
+        setMemberIds={setBoardMembers}
+        memberIds={boardMembers}
+      />
+      )}
     </>
   );
 };
