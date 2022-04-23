@@ -104,7 +104,7 @@ export const register = (
 };
 
 export const logout = () => {
-  return fireRequest("users/logoutall/", "POST", {});
+  return fireRequest("users/logout/", "POST", {});
 };
 
 export const getUser = (id: number) => {
