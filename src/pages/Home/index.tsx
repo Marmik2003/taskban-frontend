@@ -24,7 +24,6 @@ const Home = () => {
     document.title = "Taskban - Dashboard";
     dashboardCount().then((res) => {
       setLoading(false);
-      console.log(res);
       setDashboard(res);
     }).catch((err) => {
       console.log(err);

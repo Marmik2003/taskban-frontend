@@ -46,13 +46,13 @@ const Sidebar = () => {
         {/* end sidebar toggle */}
         {/* link */}
         <NavLink 
-          to="home"
+          to="todo"
           className={
             ({isActive}) => "mb-1 capitalize text-sm hover:text-blue-600 transition ease-in-out duration-500 my-2 px-2 py-2 rounded-lg" + (isActive ? " bg-blue-100" : "")
           }
         >
-          <i className="far fa-home mr-2" />
-          Home
+          <i className="far fa-check mr-2" />
+          Todo
         </NavLink>
         {/* end link */}
         {/* link */}
@@ -65,15 +65,6 @@ const Sidebar = () => {
           <i className="far fa-list mr-2" />
           Boards
         </NavLink>
-        {/* end link */}
-        {/* link */}
-        <a
-          href="/"
-          className="mb-1 capitalize text-sm hover:text-blue-600 transition ease-in-out duration-500 my-2 px-2 py-2 rounded-lg"
-        >
-          <i className="far fa-check mr-2" />
-          To Do
-        </a>
         {/* end link */}
       </div>
       {/* end sidebar content */}

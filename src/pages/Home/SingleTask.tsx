@@ -14,7 +14,7 @@ const SingleTask = ({ task, handleCompleteTask }: SingleTaskProps) => {
       <div className="flex items-center min-w-max overflow-auto md:space-x-12 space-x-20 p-2 rounded-lg">
         <h1 className="mx-3 lg:w-40 w-80">{task?.title}</h1>
 
-        <div className="flex w-15">
+        <div className="flex w-25 overflow-auto">
           <MembersList memberIds={task?.assignees} />
         </div>
 
@@ -28,12 +28,6 @@ const SingleTask = ({ task, handleCompleteTask }: SingleTaskProps) => {
         </p>
 
         <div className="flex mx-10  min-w-fit justify-end">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 rounded-lg px-4 mx-2"
-            type="button"
-          >
-            <i className="fad fa-pencil-alt mr-1" /> Edit
-          </button>
           {!task.finished && (
             <button
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 rounded-lg px-4 mx-2"

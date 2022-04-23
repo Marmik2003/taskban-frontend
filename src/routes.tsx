@@ -10,10 +10,10 @@ import Register from "./pages/Register";
 const previledgedRoutes: RouteObject[] = [
   {
     path: "/",
-    element: <Navigate to="home" />,
+    element: <Navigate to="todo" />,
   },
   {
-    path: "home",
+    path: "todo",
     element: <Home />,
   },
   {

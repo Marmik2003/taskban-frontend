@@ -3,13 +3,14 @@ import React from "react";
 
 interface ColumnListDropdownProps {
   children: React.ReactNode;
+  defaultStyle?: string
 }
 
-const ColumnListDropdown = ({ children }: ColumnListDropdownProps) => {
+const ColumnListDropdown = ({ children, defaultStyle="text-indigo-500 rounded hover:bg-indigo-500 hover:text-indigo-100" }: ColumnListDropdownProps) => {
   return (
     <>
       <Menu as="div" className="relative text-left inline-block">
-        <Menu.Button className="flex items-center justify-center w-6 h-6 ml-auto text-indigo-500 rounded hover:bg-indigo-500 hover:text-indigo-100">
+        <Menu.Button className={"flex items-center justify-center w-6 h-6 ml-auto " + defaultStyle}>
           <ThreeDotsIcon />
         </Menu.Button>
         <Transition

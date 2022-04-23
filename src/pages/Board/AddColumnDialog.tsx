@@ -50,7 +50,6 @@ const AddColumnDialog = ({
           title: res.title,
         }
       ]))
-      console.log(initialBoard, "initialBoard");
       closeDialog();
     }).catch(err => {
       console.error(err);

@@ -8,7 +8,7 @@ interface DashboardCardProps {
 
 const DashboardCard = ({ title, num }: DashboardCardProps) => {
   return (
-    <div className="report-card">
+    <div className="report-card select-none">
       <div className="card">
         <div className="card-body flex flex-col">
           {/* top */}
